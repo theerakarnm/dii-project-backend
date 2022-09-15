@@ -48,11 +48,27 @@ const addPost = async (data) => {
   }
 };
 
-const getMostLike = async (data) => {
+const getMostLike = async () => {
   try {
     const res = await prisma.posts.findMany({
       orderBy: {
         likeCount: 'asc',
+      },
+      select: {
+        id: true,
+        postContent: true,
+        imageUrl: true,
+        likeCount: true,
+        dateTime: true,
+        Users: {
+          select: {
+            username: true,
+            avatar: true,
+            fname: true,
+            lname: true,
+          },
+        },
+        comment: true,
       },
     });
 
