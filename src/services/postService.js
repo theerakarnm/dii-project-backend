@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 import storageClient from "../configs/connectStorage";
-import v4 from "uuid";
+import { v4 } from "uuid";
 
 dotenv.config();
 

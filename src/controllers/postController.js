@@ -1,4 +1,3 @@
-import { prisma } from "@prisma/client";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
@@ -12,7 +11,7 @@ const newPost = async (req, res) => {
 
   console.log(file);
   try {
-    const [type, tail] = file.mimetype.split("/");
+    const [_, tail] = file.mimetype.split("/");
 
     await addPost({ tail, buffer: file.buffer, content: body.textContent });
 

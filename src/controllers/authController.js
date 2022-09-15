@@ -13,6 +13,7 @@ const register = async (req, res) => {
 
     return res.status(httpStatus.created).send(resResult);
   } catch (e) {
+    console.log(e);
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: "internal error on register",
