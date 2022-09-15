@@ -1,6 +1,6 @@
 import express from "express";
 import authLimiterMiddleware from "../middleware/authLimiterMiddleware";
-import controller from "../controllers/authController";
+import * as controller from "../controllers/authController";
 
 const router = express.Router();
 
