@@ -23,6 +23,7 @@ app.use(
 );
 
 app.use("/auth", router.authRouter);
+app.use("/post", router.post);
 
 // test
 app.get("/testGet", (req, res) => {
