@@ -1,9 +1,39 @@
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "darwin-arm64"]
+}
+
+model Users {
+  fname    String
+  lname    String
+  username String   @id @unique
+  email    String   @unique
+  password String
+  avatar   String
+  dateTime DateTime @default(now())
+  post     Posts[]
+}
+
+model Posts {
+  id          Int        @id
+  postContent String
+  imageUrl    String
+  comment     Comments[]
+  dateTime    DateTime   @default(now())
+  Users       Users?     @relation(fields: [usersId], references: [username])
+  usersId     String?
+}
+
+model Comments {
+  id       Int      @id
+  username String
+  content  String
+  dataTime DateTime @default(now())
+  Posts    Posts?   @relation(fields: [postsId], references: [id])
+  postsId  Int?
 }
