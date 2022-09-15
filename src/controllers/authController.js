@@ -1,10 +1,10 @@
-import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 dotenv.config();
 
-import { httpStatus } from "../configs/httpStatus";
-import { getOneCredential, addUser } from "../services/userService";
-import { decodePassword } from "../libs/DecryptEncryptString";
+import { httpStatus } from '../configs/httpStatus';
+import { getOneCredential, addUser } from '../services/userService';
+import { decodePassword } from '../libs/DecryptEncryptString';
 
 const register = async (req, res) => {
   const data = req.body;
@@ -16,7 +16,7 @@ const register = async (req, res) => {
     console.log(e);
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
-      msg: "internal error on register",
+      msg: 'internal error on register',
     });
   }
 };
@@ -29,7 +29,7 @@ const login = async (req, res) => {
     if (!data)
       return res.status(httpStatus.forbidden).send({
         isOk: false,
-        msg: "user not found",
+        msg: 'user not found',
       });
 
     const isPasswordMatch = await decodePassword(password, data.password);
@@ -37,7 +37,7 @@ const login = async (req, res) => {
     if (data.username !== username || !isPasswordMatch)
       return res.status(httpStatus.forbidden).send({
         isOk: false,
-        msg: "username or password not match",
+        msg: 'username or password not match',
       });
 
     const secret = process.env.JWT_SECRET;
@@ -46,7 +46,7 @@ const login = async (req, res) => {
       return res.send({
         status: httpStatus.internalServerError,
         data: null,
-        message: "the key is not found",
+        message: 'the key is not found',
       });
 
     const token = jwt.sign(
@@ -55,7 +55,7 @@ const login = async (req, res) => {
         email: data.email,
       },
       secret,
-      { expiresIn: "240h" }
+      { expiresIn: '240h' }
     );
 
     return res.status(httpStatus.ok).send({
@@ -66,12 +66,12 @@ const login = async (req, res) => {
         firstName: data.fname,
         lastName: data.lname,
       },
-      msg: "ok",
+      msg: 'ok',
     });
   } catch (e) {
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
-      msg: "internal error on login",
+      msg: 'internal error on login',
     });
   }
 };

@@ -1,11 +1,11 @@
-import moment from "moment";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
-import storageClient from "../configs/connectStorage";
-import { v4 } from "uuid";
+import moment from 'moment';
+import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+import storageClient from '../configs/connectStorage';
+import { v4 } from 'uuid';
 
-import { hashString } from "../libs/DecryptEncryptString";
-import randAvatar from "../libs/randomAvatar";
+import { hashString } from '../libs/DecryptEncryptString';
+import randAvatar from '../libs/randomAvatar';
 
 dotenv.config();
 
@@ -22,13 +22,13 @@ const getOneCredential = async (username) => {
     return {
       isOk: true,
       data: userData,
-      msg: userData == null ? "no error but user not found" : "",
+      msg: userData == null ? 'no error but user not found' : '',
     };
   } catch (e) {
     return {
       isOk: false,
       data: null,
-      msg: "Internal error",
+      msg: 'Internal error',
     };
   }
 };
@@ -42,12 +42,12 @@ const addUser = async (data) => {
       randAvatar(randString),
     ]);
     const storageUrl =
-      "https://oijsgpmyxcrqexaewofb.supabase.co/storage/v1/object/public/";
+      'https://oijsgpmyxcrqexaewofb.supabase.co/storage/v1/object/public/';
 
     const x = await storageClient
-      .from("dii-project-bucket")
+      .from('dii-project-bucket')
       .upload(`avatar/${randString}.png`, png, {
-        cacheControl: "3600",
+        cacheControl: '3600',
         upsert: false,
       });
 
@@ -67,13 +67,13 @@ const addUser = async (data) => {
     });
     return {
       isOk: true,
-      msg: "create success",
+      msg: 'create success',
     };
   } catch (e) {
     console.log(e);
     return {
       isOk: false,
-      msg: "Internal Error on add user service",
+      msg: 'Internal Error on add user service',
     };
   }
 };

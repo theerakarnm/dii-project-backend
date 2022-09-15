@@ -13,11 +13,23 @@ const newPost = async (req, res) => {
   try {
     const [_, tail] = file.mimetype.split("/");
 
-    await addPost({ tail, buffer: file.buffer, content: body.textContent });
+    const result = await addPost({
+      owner: req.jwtObject.username,
+      tail,
+      buffer: file.buffer,
+      content: body.textContent,
+    });
+
+    if (!result.isOk)
+      return res.status(httpStatus.ok).send({
+        isOk: false,
+        msg: result.msg,
+      });
 
     return res.status(httpStatus.ok).send({
       isOk: true,
-      msg: "",
+      data: result.data,
+      msg: result.msg,
     });
   } catch (e) {
     return res.status(httpStatus.internalServerError).send({
@@ -27,4 +39,15 @@ const newPost = async (req, res) => {
   }
 };
 
-export { newPost };
+const topLike = async (req, res) => {
+  try {
+  } catch (e) {
+    console.log(e);
+    return res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: "internal error on top like",
+    });
+  }
+};
+
+export { newPost, topLike };

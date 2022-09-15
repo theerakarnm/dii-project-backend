@@ -1,6 +1,6 @@
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/avatars-avataaars-sprites";
-import svgToImg from "svg-to-img";
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-avataaars-sprites';
+import svgToImg from 'svg-to-img';
 
 const randAvatar = async (name) => {
   let svg = createAvatar(style, {
