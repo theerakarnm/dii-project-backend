@@ -1,5 +1,7 @@
+import { _ } from 'ajv';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import _m from 'moment';
 
 dotenv.config();
 
@@ -48,14 +50,19 @@ const getPopular = async (req, res) => {
         isOk: false,
         msg: result.msg,
       });
-
     const format = result.data.map((item) => {
+      console.log(_m(item.dateTime).fromNow().split(' ')[0]);
+      console.log(_m(item.dateTime).fromNow().split(' ')[0] > 24);
+      const formatData =
+        _m(item.dateTime).fromNow().split(' ')[0] > 24
+          ? _m(item.dateTime).format('MMM Do YY')
+          : _m(item.dateTime).fromNow();
       return {
         id: item.id,
         username: item.Users.username,
         name: `${item.Users.fname} ${item.Users.lname}`,
         profileImage: item.Users.avatar,
-        dateTime: item.dateTime,
+        dateTime: formatData,
         postContent: item.postContent,
         imageUrl: item.imageUrl || null,
         comment: [],

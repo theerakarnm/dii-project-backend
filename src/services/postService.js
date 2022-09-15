@@ -52,7 +52,7 @@ const getMostLike = async () => {
   try {
     const res = await prisma.posts.findMany({
       orderBy: {
-        likeCount: 'asc',
+        likeCount: 'desc',
       },
       select: {
         id: true,
@@ -75,14 +75,14 @@ const getMostLike = async () => {
     return {
       isOk: true,
       data: res,
-      msg: 'Internal Error on add user service',
+      msg: '',
     };
   } catch (e) {
     console.log(e);
 
     return {
       isOk: false,
-      msg: 'Internal Error on add user service',
+      msg: 'Internal Error on get most like service',
     };
   }
 };
