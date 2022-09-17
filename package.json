@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --experimental-specifier-resolution=node src/index.js",
-    "dev": "nodemon --experimental-specifier-resolution=node src/index.js"
+    "start": "node dist/index.js",
+    "dev": "nodemon --experimental-specifier-resolution=node src/index.js",
+    "clean:dist": "rm -rf dist && mkdir dist",
+    "build": "npm run clean:dist && babel --plugins @babel/plugin-transform-modules-commonjs src --out-dir dist",
+    "build:minify": "npm run clean:dist && babel --plugins @babel/plugin-transform-modules-commonjs src --out-dir dist --presets minify"
   },
   "repository": {
     "type": "git",
@@ -36,5 +39,14 @@
     "svg-to-img": "^2.0.9",
     "uuid": "^9.0.0"
   },
-  "type": "module"
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.18.6",
+    "@babel/preset-env": "^7.4.4",
+    "babel-preset-minify": "^0.5.0"
+  },
+  "plugins": [
+    "@babel/plugin-transform-modules-commonjs"
+  ]
 }

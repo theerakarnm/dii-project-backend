@@ -57,8 +57,8 @@ const addUser = async (data) => {
 
     await prisma.users.create({
       data: {
-        fname: data.fname,
-        lname: data.lname,
+        fname: data.firstName,
+        lname: data.lastName,
         email: data.email,
         avatar: imageUrl,
         username: data.username,
@@ -71,9 +71,25 @@ const addUser = async (data) => {
     };
   } catch (e) {
     console.log(e);
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      // The .code property can be accessed in a type-safe manner
+      if (e.code === 'P2002') {
+        return {
+          success: false,
+          data: {},
+          msg: `This ${e.meta.target.join(',')} is already taken`,
+        };
+      }
+      return {
+        success: false,
+        data: {},
+      };
+    }
+
     return {
-      isOk: false,
-      msg: 'Internal Error on add user service',
+      success: false,
+      data: {},
+      msg: 'Internal Server Error Agent',
     };
   }
 };

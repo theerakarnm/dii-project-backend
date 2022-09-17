@@ -11,6 +11,9 @@ const register = async (req, res) => {
   try {
     const resResult = await addUser(data);
 
+    if (!resResult.isOk)
+      return res.status(httpStatus.badRequest).send(resResult);
+
     return res.status(httpStatus.created).send(resResult);
   } catch (e) {
     console.log(e);
@@ -65,6 +68,8 @@ const login = async (req, res) => {
         username: data.username,
         firstName: data.fname,
         lastName: data.lname,
+        imageUrl: data.avatar,
+        email: data.email,
       },
       msg: 'ok',
     });
