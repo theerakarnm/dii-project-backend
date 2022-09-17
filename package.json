@@ -45,8 +45,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
-  },
-  "plugins": [
-    "@babel/plugin-transform-modules-commonjs"
-  ]
+  }
 }
