@@ -51,8 +51,6 @@ const getPopular = async (req, res) => {
         msg: result.msg,
       });
     const format = result.data.map((item) => {
-      console.log(_m(item.dateTime).fromNow().split(' ')[0]);
-      console.log(_m(item.dateTime).fromNow().split(' ')[0] > 24);
       const formatData =
         _m(item.dateTime).fromNow().split(' ')[0] > 24
           ? _m(item.dateTime).format('MMM Do YY')
@@ -64,6 +62,8 @@ const getPopular = async (req, res) => {
         profileImage: item.Users.avatar,
         dateTime: formatData,
         postContent: item.postContent,
+        isLike: item.likeBy.includes(req.jwtObject.username),
+        likeCount: item.likeCount,
         imageUrl: item.imageUrl || null,
         comment: [],
       };
@@ -79,6 +79,18 @@ const getPopular = async (req, res) => {
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'internal error on top like',
+    });
+  }
+};
+
+const updateLike = async (req, res) => {
+  try {
+  } catch (e) {
+    console.log(e);
+
+    return res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'internal error on updateLike',
     });
   }
 };
