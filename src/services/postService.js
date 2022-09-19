@@ -88,20 +88,28 @@ const getMostLike = async () => {
   }
 };
 
-const updateLikeService = async ({ postsId, username }) => {
+const updateLikeService = async ({ postsId, num, username }) => {
   try {
-    await prisma.likeBy.create({
-      data: {
-        postsId,
-        username,
-      },
-    });
+    num == 1
+      ? await prisma.likeBy.create({
+          data: {
+            postsId,
+            username,
+          },
+        })
+      : await prisma.likeBy.delete({
+          where: {
+            postsId,
+            username,
+          },
+        });
 
     return {
       isOk: true,
       msg: 'updated',
     };
   } catch (e) {
+    console.log(e);
     return {
       isOk: false,
       msg: 'internal error on update like service',

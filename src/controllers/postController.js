@@ -6,7 +6,11 @@ import _m from 'moment';
 dotenv.config();
 
 import { httpStatus } from '../configs/httpStatus';
-import { addPost, getMostLike } from '../services/postService';
+import {
+  addPost,
+  getMostLike,
+  updateLikeService,
+} from '../services/postService';
 
 const newPost = async (req, res) => {
   const { file, body } = req;
@@ -55,6 +59,14 @@ const getPopular = async (req, res) => {
         _m(item.dateTime).fromNow().split(' ')[0] > 24
           ? _m(item.dateTime).format('MMM Do YY')
           : _m(item.dateTime).fromNow();
+
+      console.log({ like: item.likeBy.map((item) => item.username) });
+      console.log({
+        like2: item.likeBy
+          .map((item) => item.username)
+          .includes(req.jwtObject.username),
+      });
+      console.log({ username: req.jwtObject.username });
       return {
         id: item.id,
         username: item.Users.username,
@@ -62,8 +74,13 @@ const getPopular = async (req, res) => {
         profileImage: item.Users.avatar,
         dateTime: formatData,
         postContent: item.postContent,
-        isLike: item.likeBy.includes(req.jwtObject.username),
-        likeCount: item.likeCount,
+        isLike: item.likeBy
+          .map((item) => item.username)
+          .includes(req.jwtObject.username),
+        likeContent: {
+          likeCount: item.likeBy.length,
+          likedBy: item.likeBy,
+        },
         imageUrl: item.imageUrl || null,
         comment: [],
       };
@@ -85,6 +102,24 @@ const getPopular = async (req, res) => {
 
 const updateLike = async (req, res) => {
   try {
+    const { postId, num } = req.body;
+
+    const result = await updateLikeService({
+      postsId: postId,
+      num,
+      username: req.jwtObject.username,
+    });
+
+    if (!result.isOk)
+      return res.status(httpStatus.internalServerError).send({
+        isOk: false,
+        msg: result.msg,
+      });
+
+    return res.status(httpStatus.ok).send({
+      isOk: true,
+      msg: 'updateLike success',
+    });
   } catch (e) {
     console.log(e);
 
@@ -95,4 +130,4 @@ const updateLike = async (req, res) => {
   }
 };
 
-export { newPost, getPopular };
+export { newPost, getPopular, updateLike };
