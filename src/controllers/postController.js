@@ -6,23 +6,20 @@ import _m from 'moment';
 dotenv.config();
 
 import { httpStatus } from '../configs/httpStatus';
-import {
-  addPost,
-  getMostLike,
-  updateLikeService,
-} from '../services/postService';
+import * as postService from '../services/postService';
 
+// post
 const newPost = async (req, res) => {
   const { file, body } = req;
 
   console.log(file);
   try {
-    const [_, tail] = file.mimetype.split('/');
+    const [_, tail] = !file ? [null, null] : file?.mimetype.split('/');
 
-    const result = await addPost({
+    const result = await postService.post.addPost({
       owner: req.jwtObject.username,
       tail,
-      buffer: file.buffer,
+      buffer: file?.buffer || null,
       content: body.textContent,
     });
 
@@ -38,6 +35,7 @@ const newPost = async (req, res) => {
       msg: result.msg,
     });
   } catch (e) {
+    console.error(e);
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'internal error on new post',
@@ -47,7 +45,7 @@ const newPost = async (req, res) => {
 
 const getPopular = async (req, res) => {
   try {
-    const result = await getMostLike();
+    const result = await postService.post.getMostLike();
 
     if (!result.isOk)
       return res.status(httpStatus.ok).send({
@@ -66,7 +64,7 @@ const getPopular = async (req, res) => {
           .map((item) => item.username)
           .includes(req.jwtObject.username),
       });
-      console.log({ username: req.jwtObject.username });
+      console.log({ comment: item.comment });
       return {
         id: item.id,
         username: item.Users.username,
@@ -82,7 +80,19 @@ const getPopular = async (req, res) => {
           likedBy: item.likeBy,
         },
         imageUrl: item.imageUrl || null,
-        comment: [],
+        comment: item.comment.map((comment) => {
+          const formatDataC =
+            _m(comment.dataTime).fromNow().split(' ')[0] > 24
+              ? _m(comment.dataTime).format('MMM Do YY')
+              : _m(comment.dataTime).fromNow();
+          return {
+            id: comment.id,
+            name: `${comment.Users.fname} ${comment.Users.lname}`,
+            profileImage: comment.Users.avatar,
+            content: comment.content,
+            dateTime: formatDataC,
+          };
+        }),
       };
     });
 
@@ -100,11 +110,35 @@ const getPopular = async (req, res) => {
   }
 };
 
+// comment
+const newComment = async (req, res) => {
+  const { postId, content } = req.body;
+  try {
+    const result = await postService.comment.addNewComment({
+      owner: req.jwtObject.username,
+      postId,
+      content,
+    });
+
+    return !result.isOk
+      ? res.status(httpStatus.internalServerError).send(result)
+      : res.status(httpStatus.created).send(result);
+  } catch (e) {
+    console.error(e);
+
+    return res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'internal error on updateLike',
+    });
+  }
+};
+
+// like
 const updateLike = async (req, res) => {
   try {
     const { postId, num } = req.body;
 
-    const result = await updateLikeService({
+    const result = await postService.like.updateLikeService({
       postsId: postId,
       num,
       username: req.jwtObject.username,
@@ -130,4 +164,4 @@ const updateLike = async (req, res) => {
   }
 };
 
-export { newPost, getPopular, updateLike };
+export { newPost, getPopular, updateLike, newComment };

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
-import storageClient from '../configs/connectStorage';
+import storageClient from '../../configs/connectStorage';
 import { v4 } from 'uuid';
 
 dotenv.config();
@@ -14,16 +14,18 @@ const addPost = async (data) => {
 
     const uniqueString = v4();
 
-    const storage = await storageClient
-      .from('dii-project-bucket')
-      .upload(`post/${uniqueString}.${data.tail}`, data.buffer, {
-        cacheControl: '3600',
-        upsert: false,
-      });
+    const storage = !data.buffer
+      ? { error: false }
+      : await storageClient
+          .from('dii-project-bucket')
+          .upload(`post/${uniqueString}.${data.tail}`, data.buffer, {
+            cacheControl: '3600',
+            upsert: false,
+          });
 
     if (storage.error) throw new Error(storage.error);
 
-    const imageUrl = `${storageUrl}${storage.data.Key}`;
+    const imageUrl = !data.buffer ? '' : `${storageUrl}${storage.data.Key}`;
 
     const result = await prisma.posts.create({
       data: {
@@ -69,7 +71,14 @@ const getMostLike = async () => {
           },
         },
         likeBy: true,
-        comment: true,
+        comment: {
+          select: {
+            id: true,
+            Users: true,
+            content: true,
+            dataTime: true,
+          },
+        },
       },
     });
 

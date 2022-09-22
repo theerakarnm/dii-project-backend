@@ -1,0 +1,41 @@
+import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+import storageClient from '../../configs/connectStorage';
+import { v4 } from 'uuid';
+
+dotenv.config();
+
+const prisma = new PrismaClient();
+
+const updateLikeService = async ({ postsId, num, username }) => {
+  try {
+    num == 1
+      ? await prisma.likeBy.create({
+          data: {
+            postsId,
+            username,
+          },
+        })
+      : await prisma.likeBy.delete({
+          where: {
+            username_postsId: {
+              username: username,
+              postsId: postsId,
+            },
+          },
+        });
+
+    return {
+      isOk: true,
+      msg: 'updated',
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      isOk: false,
+      msg: 'internal error on update like service',
+    };
+  }
+};
+
+export { updateLikeService };
