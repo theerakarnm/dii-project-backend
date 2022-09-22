@@ -11,14 +11,16 @@ generator client {
 model Users {
   fname      String
   lname      String
-  username   String    @id @unique
-  email      String    @unique
+  username   String     @id @unique
+  email      String     @unique
   password   String
   avatar     String
-  dateTime   DateTime  @default(now())
+  dateTime   DateTime   @default(now())
   post       Posts[]
-  followedBy Follows[] @relation("following")
-  following  Follows[] @relation("follower")
+  like       LikeBy[]
+  comment    Comments[]
+  followedBy Follows[]  @relation("following")
+  following  Follows[]  @relation("follower")
 }
 
 model Follows {
@@ -46,12 +48,14 @@ model LikeBy {
   username String
   Posts    Posts? @relation(fields: [postsId], references: [id])
   postsId  String
+  Users    Users? @relation(fields: [username], references: [username])
 
   @@id([username, postsId])
 }
 
 model Comments {
   id       Int      @id @default(autoincrement())
+  Users    Users?   @relation(fields: [username], references: [username])
   username String
   content  String
   dataTime DateTime @default(now())
