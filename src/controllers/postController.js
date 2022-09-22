@@ -1,11 +1,11 @@
 import { _ } from 'ajv';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import _m from 'moment';
 
 dotenv.config();
 
 import { httpStatus } from '../configs/httpStatus';
+import formatDataFunction from '../libs/formatDateFromNow';
 import * as postService from '../services/postService';
 
 // post
@@ -53,10 +53,7 @@ const getPopular = async (req, res) => {
         msg: result.msg,
       });
     const format = result.data.map((item) => {
-      const formatData =
-        _m(item.dateTime).fromNow().split(' ')[0] > 24
-          ? _m(item.dateTime).format('MMM Do YY')
-          : _m(item.dateTime).fromNow();
+      const formatData = formatDataFunction(item.dateTime);
 
       console.log({ like: item.likeBy.map((item) => item.username) });
       console.log({
@@ -81,10 +78,7 @@ const getPopular = async (req, res) => {
         },
         imageUrl: item.imageUrl || null,
         comment: item.comment.map((comment) => {
-          const formatDataC =
-            _m(comment.dataTime).fromNow().split(' ')[0] > 24
-              ? _m(comment.dataTime).format('MMM Do YY')
-              : _m(comment.dataTime).fromNow();
+          const formatDataC = formatDataFunction(comment.dataTime);
           return {
             id: comment.id,
             name: `${comment.Users.fname} ${comment.Users.lname}`,
@@ -106,6 +100,59 @@ const getPopular = async (req, res) => {
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'internal error on top like',
+    });
+  }
+};
+
+const getRecent = async (req, res) => {
+  try {
+    const result = await postService.post.getRecentPost();
+
+    if (!result.isOk)
+      return res.status(httpStatus.ok).send({
+        isOk: false,
+        msg: result.msg,
+      });
+    const format = result.data.map((item) => {
+      const formatData = formatDataFunction(item.dateTime);
+      return {
+        id: item.id,
+        username: item.Users.username,
+        name: `${item.Users.fname} ${item.Users.lname}`,
+        profileImage: item.Users.avatar,
+        dateTime: formatData,
+        postContent: item.postContent,
+        isLike: item.likeBy
+          .map((item) => item.username)
+          .includes(req.jwtObject.username),
+        likeContent: {
+          likeCount: item.likeBy.length,
+          likedBy: item.likeBy,
+        },
+        imageUrl: item.imageUrl || null,
+        comment: item.comment.map((comment) => {
+          const formatDataC = formatDataFunction(comment.dataTime);
+          return {
+            id: comment.id,
+            name: `${comment.Users.fname} ${comment.Users.lname}`,
+            profileImage: comment.Users.avatar,
+            content: comment.content,
+            dateTime: formatDataC,
+          };
+        }),
+      };
+    });
+
+    return res.status(httpStatus.ok).send({
+      isOk: true,
+      data: format,
+      msg: result.msg,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'internal error on recent',
     });
   }
 };
@@ -164,4 +211,4 @@ const updateLike = async (req, res) => {
   }
 };
 
-export { newPost, getPopular, updateLike, newComment };
+export { newPost, getPopular, updateLike, newComment, getRecent };

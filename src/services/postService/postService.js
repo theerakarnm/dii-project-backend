@@ -72,11 +72,15 @@ const getMostLike = async () => {
         },
         likeBy: true,
         comment: {
+          take: 3,
           select: {
             id: true,
             Users: true,
             content: true,
             dataTime: true,
+          },
+          orderBy: {
+            dataTime: "desc",
           },
         },
       },
@@ -97,33 +101,55 @@ const getMostLike = async () => {
   }
 };
 
-const updateLikeService = async ({ postsId, num, username }) => {
+const getRecentPost = async () => {
   try {
-    num == 1
-      ? await prisma.likeBy.create({
-          data: {
-            postsId,
-            username,
+    const res = await prisma.posts.findMany({
+      orderBy: {
+        dateTime: "desc",
+      },
+      select: {
+        id: true,
+        postContent: true,
+        imageUrl: true,
+        likeCount: true,
+        dateTime: true,
+        Users: {
+          select: {
+            username: true,
+            avatar: true,
+            fname: true,
+            lname: true,
           },
-        })
-      : await prisma.likeBy.delete({
-          where: {
-            postsId,
-            username,
+        },
+        likeBy: true,
+        comment: {
+          take: 3,
+          select: {
+            id: true,
+            Users: true,
+            content: true,
+            dataTime: true,
           },
-        });
+          orderBy: {
+            dataTime: "desc",
+          },
+        },
+      },
+    });
 
     return {
       isOk: true,
-      msg: "updated",
+      data: res,
+      msg: "",
     };
   } catch (e) {
     console.log(e);
+
     return {
       isOk: false,
-      msg: "internal error on update like service",
+      msg: "Internal Error on get most like service",
     };
   }
 };
 
-export { addPost, getMostLike, updateLikeService };
+export { addPost, getMostLike, getRecentPost };
