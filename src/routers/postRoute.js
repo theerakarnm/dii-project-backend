@@ -23,5 +23,6 @@ router.post('/add', auth, upload.single('file'), controller.newPost);
 router.get('/popular', auth, controller.getPopular);
 router.get('/recent', auth, controller.getRecent);
 router.patch('/like', auth, controller.updateLike);
+router.post('/comment/add', auth, controller.newComment);
 
 export default router;
