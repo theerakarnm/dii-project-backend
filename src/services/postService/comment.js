@@ -33,3 +33,34 @@ export const addNewComment = async ({ owner, postId, content }) => {
     };
   }
 };
+
+export const getCommentPerPost = async (postId) => {
+  try {
+    const comment = await prisma.comments.findMany({
+      where: {
+        postsId: postId,
+      },
+      select: {
+        id: true,
+        Users: true,
+        content: true,
+        dataTime: true,
+      },
+      orderBy: {
+        dataTime: 'desc',
+      },
+    });
+
+    return {
+      isOk: true,
+      data: comment || [],
+      msg: 'success',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isOk: false,
+      msg: 'internal error at getCommentPerPost service',
+    };
+  }
+};

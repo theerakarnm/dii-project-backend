@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-import { httpStatus } from '../configs/httpStatus';
-import formatDataFunction from '../libs/formatDateFromNow';
-import * as postService from '../services/postService';
+import { httpStatus } from '../../configs/httpStatus';
+import formatDataFunction from '../../libs/formatDateFromNow';
+import * as postService from '../../services/postService';
 
 // post
 const newPost = async (req, res) => {
@@ -130,6 +130,7 @@ const getRecent = async (req, res) => {
           likedBy: item.likeBy,
         },
         imageUrl: item.imageUrl || null,
+        hasMoreComment: item.comment.length >= 3 ? true : false,
         comment: item.comment.map((comment) => {
           const formatDataC = formatDataFunction(comment.dataTime);
           return {
@@ -157,58 +158,4 @@ const getRecent = async (req, res) => {
   }
 };
 
-// comment
-const newComment = async (req, res) => {
-  const { postId, content } = req.body;
-  try {
-    const result = await postService.comment.addNewComment({
-      owner: req.jwtObject.username,
-      postId,
-      content,
-    });
-
-    return !result.isOk
-      ? res.status(httpStatus.internalServerError).send(result)
-      : res.status(httpStatus.created).send(result);
-  } catch (e) {
-    console.error(e);
-
-    return res.status(httpStatus.internalServerError).send({
-      isOk: false,
-      msg: 'internal error on updateLike',
-    });
-  }
-};
-
-// like
-const updateLike = async (req, res) => {
-  try {
-    const { postId, num } = req.body;
-
-    const result = await postService.like.updateLikeService({
-      postsId: postId,
-      num,
-      username: req.jwtObject.username,
-    });
-
-    if (!result.isOk)
-      return res.status(httpStatus.internalServerError).send({
-        isOk: false,
-        msg: result.msg,
-      });
-
-    return res.status(httpStatus.ok).send({
-      isOk: true,
-      msg: 'updateLike success',
-    });
-  } catch (e) {
-    console.log(e);
-
-    return res.status(httpStatus.internalServerError).send({
-      isOk: false,
-      msg: 'internal error on updateLike',
-    });
-  }
-};
-
-export { newPost, getPopular, updateLike, newComment, getRecent };
+export { newPost, getPopular, getRecent };

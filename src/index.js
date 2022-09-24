@@ -22,8 +22,8 @@ app.use(
   })
 );
 
-app.use('/auth', router.authRouter);
-app.use('/post', router.postRouter);
+app.use('/api/v1/auth', router.authRouter);
+app.use('/api/v1/posts', router.postRouter);
 
 // test
 app.get('/testGet', (req, res) => {
