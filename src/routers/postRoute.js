@@ -19,10 +19,15 @@ const upload = multer({
   },
 });
 
-router.post('/add', auth, upload.single('file'), controller.post.newPost);
+router.get('/', auth, controller.post.getRecent);
 router.get('/popular', auth, controller.post.getPopular);
 router.get('/recent', auth, controller.post.getRecent);
-router.patch('/like', auth, controller.like.updateLike);
+router.post('/', auth, upload.single('file'), controller.post.newPost);
+router.put('/', auth, controller.post.updatePost);
+router.delete('/:postId', auth, controller.post.deletePost);
+
+router.put('/like', auth, controller.like.updateLike);
+
 router.post('/comment/add', auth, controller.comment.newComment);
 router.post('/comment/get/:postId', auth, controller.comment.getCommentPerPost);
 

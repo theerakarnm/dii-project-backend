@@ -43,6 +43,30 @@ const newPost = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    res.status(httpStatus.notImplemented).send({});
+  } catch (e) {
+    console.log(e);
+    res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'error on delete post controller',
+    });
+  }
+};
+
+const updatePost = async (req, res) => {
+  try {
+    res.status(httpStatus.notImplemented).send({});
+  } catch (e) {
+    console.log(e);
+    res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'error on update post controller',
+    });
+  }
+};
+
 const getPopular = async (req, res) => {
   try {
     const result = await postService.post.getMostLike();
@@ -158,4 +182,4 @@ const getRecent = async (req, res) => {
   }
 };
 
-export { newPost, getPopular, getRecent };
+export { newPost, getPopular, getRecent, deletePost, updatePost };

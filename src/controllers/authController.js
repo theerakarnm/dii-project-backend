@@ -62,7 +62,7 @@ const login = async (req, res) => {
     );
 
     return res.status(httpStatus.ok).send({
-      isOk: false,
+      isOk: true,
       data: {
         token,
         username: data.username,
