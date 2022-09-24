@@ -23,7 +23,7 @@ router.get('/', auth, controller.post.getRecent);
 router.get('/popular', auth, controller.post.getPopular);
 router.get('/recent', auth, controller.post.getRecent);
 router.post('/', auth, upload.single('file'), controller.post.newPost);
-router.put('/', auth, controller.post.updatePost);
+router.put('/:postId', auth, controller.post.updatePost);
 router.delete('/:postId', auth, controller.post.deletePost);
 
 router.put('/like', auth, controller.like.updateLike);

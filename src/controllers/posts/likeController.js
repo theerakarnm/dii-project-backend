@@ -13,7 +13,7 @@ const updateLike = async (req, res) => {
   try {
     const { postId, num } = req.body;
 
-    const result = await postService.like.updateLikeService({
+    const result = await postService.like._update({
       postsId: postId,
       num,
       username: req.jwtObject.username,

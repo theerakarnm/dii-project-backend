@@ -7,7 +7,7 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
-const updateLikeService = async ({ postsId, num, username }) => {
+const _update = async ({ postsId, num, username }) => {
   try {
     num == 1
       ? await prisma.likeBy.create({
@@ -38,4 +38,4 @@ const updateLikeService = async ({ postsId, num, username }) => {
   }
 };
 
-export { updateLikeService };
+export { _update };

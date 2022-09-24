@@ -7,11 +7,11 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
-export const getListPerPost = ({ postId }) => {};
+export const _getListPerPost = ({ postId }) => {};
 
-export const getOne = ({ commentId }) => {};
+export const _getOne = ({ commentId }) => {};
 
-export const addNewComment = async ({ owner, postId, content }) => {
+export const _add = async ({ owner, postId, content }) => {
   try {
     await prisma.comments.create({
       data: {
@@ -34,7 +34,7 @@ export const addNewComment = async ({ owner, postId, content }) => {
   }
 };
 
-export const getCommentPerPost = async (postId) => {
+export const _getCommentPerPost = async (postId) => {
   try {
     const comment = await prisma.comments.findMany({
       where: {

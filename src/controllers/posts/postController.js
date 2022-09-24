@@ -16,7 +16,7 @@ const newPost = async (req, res) => {
   try {
     const [_, tail] = !file ? [null, null] : file?.mimetype.split('/');
 
-    const result = await postService.post.addPost({
+    const result = await postService.post._add({
       owner: req.jwtObject.username,
       tail,
       buffer: file?.buffer || null,
@@ -44,8 +44,16 @@ const newPost = async (req, res) => {
 };
 
 const deletePost = async (req, res) => {
+  const { postId } = req.params;
   try {
-    res.status(httpStatus.notImplemented).send({});
+    const result = await postService.post._delete({
+      id: postId,
+    });
+
+    if (!result.isOk)
+      return res.status(httpStatus.internalServerError).send(result);
+
+    res.status(httpStatus.ok).send(result);
   } catch (e) {
     console.log(e);
     res.status(httpStatus.internalServerError).send({
@@ -56,8 +64,18 @@ const deletePost = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
+  const { content } = req.body;
+  const { postId } = req.params;
   try {
-    res.status(httpStatus.notImplemented).send({});
+    const result = await postService.post._update({
+      id: postId,
+      newContent: content,
+    });
+
+    if (!result.isOk)
+      return res.status(httpStatus.internalServerError).send(result);
+
+    res.status(httpStatus.ok).send(result);
   } catch (e) {
     console.log(e);
     res.status(httpStatus.internalServerError).send({
@@ -69,7 +87,7 @@ const updatePost = async (req, res) => {
 
 const getPopular = async (req, res) => {
   try {
-    const result = await postService.post.getMostLike();
+    const result = await postService.post._getMostLike();
 
     if (!result.isOk)
       return res.status(httpStatus.ok).send({
@@ -130,7 +148,7 @@ const getPopular = async (req, res) => {
 
 const getRecent = async (req, res) => {
   try {
-    const result = await postService.post.getRecentPost();
+    const result = await postService.post._getRecentPost();
 
     if (!result.isOk)
       return res.status(httpStatus.ok).send({

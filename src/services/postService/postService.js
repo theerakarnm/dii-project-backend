@@ -7,7 +7,7 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
-const addPost = async (data) => {
+const _add = async (data) => {
   try {
     const storageUrl =
       'https://oijsgpmyxcrqexaewofb.supabase.co/storage/v1/object/public/';
@@ -50,7 +50,7 @@ const addPost = async (data) => {
   }
 };
 
-const getMostLike = async () => {
+const _getMostLike = async () => {
   try {
     const res = await prisma.posts.findMany({
       orderBy: {
@@ -101,7 +101,7 @@ const getMostLike = async () => {
   }
 };
 
-const getRecentPost = async () => {
+const _getRecentPost = async () => {
   try {
     const res = await prisma.posts.findMany({
       orderBy: {
@@ -152,4 +152,49 @@ const getRecentPost = async () => {
   }
 };
 
-export { addPost, getMostLike, getRecentPost };
+const _update = async ({ id, newContent }) => {
+  try {
+    await prisma.posts.update({
+      where: {
+        id,
+      },
+      data: {
+        postContent: newContent,
+      },
+    });
+
+    return {
+      isOk: true,
+      msg: 'update success',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isOk: false,
+      msg: 'internal error on update post service',
+    };
+  }
+};
+
+const _delete = async ({ id }) => {
+  try {
+    await prisma.posts.delete({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      isOk: true,
+      msg: 'delete success',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isOk: false,
+      msg: 'internal error on delete post service',
+    };
+  }
+};
+
+export { _add, _getMostLike, _getRecentPost, _update, _delete };

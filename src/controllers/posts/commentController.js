@@ -12,7 +12,7 @@ import * as postService from '../../services/postService';
 const newComment = async (req, res) => {
   const { postId, content } = req.body;
   try {
-    const result = await postService.comment.addNewComment({
+    const result = await postService.comment._add({
       owner: req.jwtObject.username,
       postId,
       content,
