@@ -26,7 +26,7 @@ router.post('/', auth, upload.single('file'), controller.post.newPost);
 router.put('/:postId', auth, controller.post.updatePost);
 router.delete('/:postId', auth, controller.post.deletePost);
 
-router.put('/like', auth, controller.like.updateLike);
+router.put('/like/:postId', auth, controller.like.updateLike);
 
 router.post('/comment/add', auth, controller.comment.newComment);
 router.post('/comment/get/:postId', auth, controller.comment.getCommentPerPost);

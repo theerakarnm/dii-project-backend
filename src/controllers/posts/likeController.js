@@ -11,7 +11,8 @@ import * as postService from '../../services/postService';
 // like
 const updateLike = async (req, res) => {
   try {
-    const { postId, num } = req.body;
+    const { num } = req.body;
+    const { postId } = req.params;
 
     const result = await postService.like._update({
       postsId: postId,
