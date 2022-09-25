@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
+import morgan from 'morgan';
 
 import * as router from './routers';
 
@@ -14,6 +15,7 @@ const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(morgan('tiny'));
 app.use(
   rateLimit({
     windowMs: 10000,
