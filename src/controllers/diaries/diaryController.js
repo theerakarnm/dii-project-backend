@@ -7,12 +7,13 @@ import { httpStatus } from '../../configs/httpStatus';
 import formatDataFunction from '../../libs/formatDateFromNow';
 
 const newDiary = (req, res) => {
-  const diaryImage = req.file;
+  const { file, body } = req;
   try {
-    const [_, tail] = !diaryImage
-      ? [null, null]
-      : diaryImage?.mimetype.split('/');
+    console.log({ file, body });
+
+    res.sendStatus(httpStatus.notImplemented);
   } catch (e) {
+    console.error(e);
     res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'internal error on controller diary new',
@@ -22,7 +23,9 @@ const newDiary = (req, res) => {
 
 const getOne = (req, res) => {
   try {
+    res.sendStatus(httpStatus.notImplemented);
   } catch (e) {
+    console.error(e);
     res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'internal error on controller diary get one',
@@ -32,7 +35,9 @@ const getOne = (req, res) => {
 
 const getListPerUser = (req, res) => {
   try {
+    res.sendStatus(httpStatus.notImplemented);
   } catch (e) {
+    console.error(e);
     res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'internal error on controller diary get list',

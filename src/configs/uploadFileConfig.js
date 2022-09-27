@@ -5,7 +5,7 @@ export const upload = multer({
     fileSize: 1024 * 1024 * 5, // limit 5MB
   },
   fileFilter(_, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {
       return cb(new Error('Please upload an image'));
     }
 

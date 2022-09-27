@@ -97,4 +97,32 @@ const _addUser = async (data) => {
     };
   }
 };
-export { _addUser, _getOne };
+
+const _updateSingle = async ({ username, content }) => {
+  try {
+    await prisma.users.update({
+      where: {
+        username: username,
+      },
+      data: {
+        fname: content.fname,
+        lname: content.lname,
+        email: content.email,
+        bio: content.bio,
+      },
+    });
+
+    return {
+      isOk: true,
+      msg: 'update success',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isOk: false,
+      msg: 'error on update single service',
+    };
+  }
+};
+
+export { _addUser, _getOne, _updateSingle };

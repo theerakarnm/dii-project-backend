@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 import { httpStatus } from '../configs/httpStatus';
-import { _getOne } from '../services/userService';
+import { _getOne, _updateSingle } from '../services/userService';
 import formatData from '../libs/formatDateFromNow';
 
 const getOne = async (req, res) => {
@@ -62,4 +62,44 @@ const getOne = async (req, res) => {
   }
 };
 
-export { getOne };
+const updateOne = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { fname, lname, email, bio } = req.body;
+
+    if (!username)
+      return res.status(httpStatus.badRequest).send({
+        isOk: false,
+        msg: 'required username',
+      });
+
+    const result = await _updateSingle({
+      username,
+      content: {
+        fname,
+        lname,
+        email,
+        bio,
+      },
+    });
+
+    if (!result.isOk)
+      return res.status(httpStatus.internalServerError).send({
+        isOk: false,
+        msg: result.msg,
+      });
+
+    res.status(httpStatus.ok).send({
+      isOk: true,
+      msg: 'success',
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'internal error on update one controller',
+    });
+  }
+};
+
+export { getOne, updateOne };
