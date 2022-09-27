@@ -3,13 +3,13 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 import { httpStatus } from '../configs/httpStatus';
-import { getOneCredential, addUser } from '../services/userService';
+import { _getOne, _addUser } from '../services/userService';
 import { decodePassword } from '../libs/DecryptEncryptString';
 
 const register = async (req, res) => {
   const data = req.body;
   try {
-    const resResult = await addUser(data);
+    const resResult = await _addUser(data);
 
     if (!resResult.isOk)
       return res.status(httpStatus.badRequest).send(resResult);
@@ -27,7 +27,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const { data } = await getOneCredential(username);
+    const { data } = await _getOne(username);
 
     if (!data)
       return res.status(httpStatus.forbidden).send({

@@ -26,6 +26,7 @@ app.use(
 
 app.use('/api/v1/auth', router.authRouter);
 app.use('/api/v1/posts', router.postRouter);
+app.use('/api/v1/users', router.userRouter);
 
 // test
 app.get('/testGet', (req, res) => {

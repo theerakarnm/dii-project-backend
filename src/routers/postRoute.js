@@ -28,7 +28,7 @@ router.delete('/:postId', auth, controller.post.deletePost);
 
 router.put('/like/:postId', auth, controller.like.updateLike);
 
-router.post('/comment/add', auth, controller.comment.newComment);
-router.post('/comment/get/:postId', auth, controller.comment.getCommentPerPost);
+router.post('/comment/add', auth, controller.comment.newComment); // TODO : change to plural
+router.get('/comment/:postId', auth, controller.comment.getCommentPerPost);
 
 export default router;

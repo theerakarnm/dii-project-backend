@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import dotenv from 'dotenv';
 import storageClient from '../configs/connectStorage';
 import { v4 } from 'uuid';
@@ -11,13 +11,17 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
-const getOneCredential = async (username) => {
+const _getOne = async (username, select = {}) => {
   try {
-    const userData = await prisma.users.findUnique({
+    const config = {
       where: {
         username,
       },
-    });
+    };
+
+    select !== {} ? (config.select = select) : null;
+
+    const userData = await prisma.users.findUnique(config);
 
     return {
       isOk: true,
@@ -33,7 +37,7 @@ const getOneCredential = async (username) => {
   }
 };
 
-const addUser = async (data) => {
+const _addUser = async (data) => {
   try {
     const randString = v4();
 
@@ -93,4 +97,4 @@ const addUser = async (data) => {
     };
   }
 };
-export { addUser, getOneCredential };
+export { _addUser, _getOne };
