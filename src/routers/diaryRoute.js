@@ -1,7 +1,7 @@
 import express from 'express';
 import { auth } from '../middleware/AuthMiddleware';
-import * as controller from '../controllers/diarys';
-import multer from 'multer';
+import * as controller from '../controllers/diaries';
+import { upload } from '../configs/uploadFileConfig';
 
 const router = express.Router();
 
