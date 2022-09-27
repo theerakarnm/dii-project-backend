@@ -19,7 +19,7 @@ const getOne = async (req, res) => {
       lname: true,
     });
 
-    console.log({ user });
+    console.log({ user: user.data.post });
 
     if (!user.isOk) return res.status(httpStatus.badRequest).send(user);
     if (!user.data)
@@ -36,7 +36,7 @@ const getOne = async (req, res) => {
       diaryCount: 0,
       email: user.data.email,
       post: user.data.post.map((p) => {
-        const formatDataC = formatData(p.dataTime);
+        const formatDataC = formatData(p.dateTime);
         return {
           id: p.id,
           content: p.postContent,
@@ -46,7 +46,7 @@ const getOne = async (req, res) => {
       }),
     };
 
-    console.log({ format });
+    console.log({ format: format.post });
 
     res.status(httpStatus.ok).send({
       isOk: true,

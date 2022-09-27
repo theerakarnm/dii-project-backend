@@ -178,6 +178,7 @@ const getRecent = async (req, res) => {
           return {
             id: comment.id,
             name: `${comment.Users.fname} ${comment.Users.lname}`,
+            username: comment.Users.username,
             profileImage: comment.Users.avatar,
             content: comment.content,
             dateTime: formatDataC,
