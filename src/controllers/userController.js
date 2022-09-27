@@ -19,8 +19,6 @@ const getOne = async (req, res) => {
       lname: true,
     });
 
-    console.log({ user: user.data.post });
-
     if (!user.isOk) return res.status(httpStatus.badRequest).send(user);
     if (!user.data)
       return res.status(httpStatus.noContent).send({
@@ -31,6 +29,7 @@ const getOne = async (req, res) => {
 
     const format = {
       name: `${user.data.fname} ${user.data.lname}`,
+      username: user.data.username,
       profileUrl: user.data.avatar,
       postCount: user.data.post.length,
       diaryCount: 0,
@@ -45,8 +44,6 @@ const getOne = async (req, res) => {
         };
       }),
     };
-
-    console.log({ format: format.post });
 
     res.status(httpStatus.ok).send({
       isOk: true,

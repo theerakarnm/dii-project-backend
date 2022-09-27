@@ -1,7 +1,6 @@
 import express from 'express';
 import { auth } from '../middleware/AuthMiddleware';
 import * as controller from '../controllers/posts';
-import multer from 'multer';
 import { upload } from '../configs/uploadFileConfig';
 
 const router = express.Router();
@@ -15,7 +14,7 @@ router.delete('/:postId', auth, controller.post.deletePost);
 
 router.put('/like/:postId', auth, controller.like.updateLike);
 
-router.post('/comment/add', auth, controller.comment.newComment); // TODO : change to plural
-router.get('/comment/:postId', auth, controller.comment.getCommentPerPost);
+router.post('/comments/add', auth, controller.comment.newComment); // TODO : change to plural
+router.get('/comments/:postId', auth, controller.comment.getCommentPerPost);
 
 export default router;
