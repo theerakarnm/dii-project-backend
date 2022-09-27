@@ -27,7 +27,14 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const { data } = await _getOne(username);
+    const { data } = await _getOne(username, {
+      username: true,
+      password: true,
+      email: true,
+      fname: true,
+      lname: true,
+      avatar: true,
+    });
 
     if (!data)
       return res.status(httpStatus.forbidden).send({
