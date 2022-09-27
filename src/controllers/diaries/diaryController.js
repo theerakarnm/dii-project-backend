@@ -5,7 +5,7 @@ dotenv.config();
 
 import { httpStatus } from '../../configs/httpStatus';
 import formatDataFunction from '../../libs/formatDateFromNow';
-import { _add } from '../../services/diaryService/diary';
+import { _add, _getListByUsername } from '../../services/diaryService/diary';
 
 const newDiary = async (req, res) => {
   const { file } = req;
@@ -55,9 +55,13 @@ const getOne = (req, res) => {
   }
 };
 
-const getListPerUser = (req, res) => {
+const getListPerUser = async (req, res) => {
   try {
-    res.sendStatus(httpStatus.notImplemented);
+    const result = await _getListByUsername({ owner: req.jwtObject.username });
+    if (!result.isOk)
+      return res.status(httpStatus.internalServerError).send(result);
+
+    res.status(httpStatus.ok).send(result);
   } catch (e) {
     console.error(e);
     res.status(httpStatus.internalServerError).send({

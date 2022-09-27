@@ -47,3 +47,25 @@ export const _add = async (data) => {
     };
   }
 };
+
+export const _getListByUsername = async ({ owner }) => {
+  try {
+    const result = await prisma.diaries.findMany({
+      where: {
+        assignTo: owner,
+      },
+    });
+
+    return {
+      isOk: true,
+      data: result,
+      msg: 'create success',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isOk: false,
+      msg: 'internal error on add diary service',
+    };
+  }
+};
