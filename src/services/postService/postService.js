@@ -152,6 +152,56 @@ const _getRecentPost = async () => {
   }
 };
 
+const _getOne = async (postId) => {
+  try {
+    const res = await prisma.posts.findUnique({
+      where: {
+        id: postId,
+      },
+      select: {
+        id: true,
+        postContent: true,
+        imageUrl: true,
+        likeCount: true,
+        dateTime: true,
+        Users: {
+          select: {
+            username: true,
+            avatar: true,
+            fname: true,
+            lname: true,
+          },
+        },
+        likeBy: true,
+        comment: {
+          take: 3,
+          select: {
+            id: true,
+            Users: true,
+            content: true,
+            dataTime: true,
+          },
+          orderBy: {
+            dataTime: 'desc',
+          },
+        },
+      },
+    });
+
+    return {
+      isOk: true,
+      data: res,
+      msg: 'get success',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isOk: false,
+      msg: 'internal error on get one post service',
+    };
+  }
+};
+
 const _update = async ({ id, newContent }) => {
   try {
     await prisma.posts.update({
@@ -197,4 +247,4 @@ const _delete = async ({ id }) => {
   }
 };
 
-export { _add, _getMostLike, _getRecentPost, _update, _delete };
+export { _add, _getMostLike, _getRecentPost, _update, _delete, _getOne };

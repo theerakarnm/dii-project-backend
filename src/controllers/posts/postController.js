@@ -203,7 +203,7 @@ const getRecent = async (req, res) => {
   }
 };
 
-const getOne = async (req, res) => {
+const getById = async (req, res) => {
   try {
   } catch (e) {
     console.log(e);
@@ -214,4 +214,4 @@ const getOne = async (req, res) => {
   }
 };
 
-export { newPost, getPopular, getRecent, deletePost, updatePost };
+export { newPost, getPopular, getRecent, deletePost, updatePost, getById };
