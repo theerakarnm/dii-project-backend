@@ -204,7 +204,20 @@ const getRecent = async (req, res) => {
 };
 
 const getById = async (req, res) => {
+  const { postId } = req.params;
   try {
+    if (!postId)
+      return res.status(httpStatus.badRequest).send({
+        isOk: false,
+        msg: 'Post id is required',
+      });
+
+    const result = await postService.post._getOne(postId);
+
+    if (!result.isOk)
+      return res.status(httpStatus.internalServerError).send(result);
+
+    res.status(httpStatus.ok).send(result);
   } catch (e) {
     console.log(e);
     return res.status(httpStatus.internalServerError).send({
