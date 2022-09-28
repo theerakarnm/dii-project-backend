@@ -17,6 +17,7 @@ const getOne = async (req, res) => {
       avatar: true,
       fname: true,
       lname: true,
+      bio: true,
     });
 
     if (!user.isOk) return res.status(httpStatus.badRequest).send(user);
@@ -31,6 +32,7 @@ const getOne = async (req, res) => {
       name: `${user.data.fname} ${user.data.lname}`,
       username: user.data.username,
       profileUrl: user.data.avatar,
+      bio: user.data.bio,
       postCount: user.data.post.length,
       diaryCount: user.data.countDiary,
       email: user.data.email,

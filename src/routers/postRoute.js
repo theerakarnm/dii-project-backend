@@ -6,6 +6,7 @@ import { upload } from '../configs/uploadFileConfig';
 const router = express.Router();
 
 router.get('/', auth, controller.post.getRecent);
+router.get('/:postId', auth, controller.post.getRecent);
 router.get('/popular', auth, controller.post.getPopular);
 router.get('/recent', auth, controller.post.getRecent);
 router.post('/', auth, upload.single('file'), controller.post.newPost);

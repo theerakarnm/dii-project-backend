@@ -203,4 +203,15 @@ const getRecent = async (req, res) => {
   }
 };
 
+const getOne = async (req, res) => {
+  try {
+  } catch (e) {
+    console.log(e);
+    return res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'internal error on get one post',
+    });
+  }
+};
+
 export { newPost, getPopular, getRecent, deletePost, updatePost };
