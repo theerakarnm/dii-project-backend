@@ -32,7 +32,7 @@ const getOne = async (req, res) => {
       username: user.data.username,
       profileUrl: user.data.avatar,
       postCount: user.data.post.length,
-      diaryCount: 0,
+      diaryCount: user.data.countDiary,
       email: user.data.email,
       post: user.data.post.map((p) => {
         const formatDataC = formatData(p.dateTime);

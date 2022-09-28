@@ -22,10 +22,15 @@ const _getOne = async (username, select = {}) => {
     select !== {} ? (config.select = select) : null;
 
     const userData = await prisma.users.findUnique(config);
+    const countDiary = await prisma.diaries.count({
+      where: {
+        assignTo: username,
+      },
+    });
 
     return {
       isOk: true,
-      data: userData,
+      data: { ...userData, countDiary },
       msg: userData == null ? 'no error but user not found' : '',
     };
   } catch (e) {

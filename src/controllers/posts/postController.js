@@ -150,6 +150,8 @@ const getRecent = async (req, res) => {
   try {
     const result = await postService.post._getRecentPost();
 
+    console.log(req.jwtObject);
+
     if (!result.isOk)
       return res.status(httpStatus.ok).send({
         isOk: false,
