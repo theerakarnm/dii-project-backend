@@ -21,12 +21,14 @@ const _getOne = async (username, select = {}) => {
 
     select !== {} ? (config.select = select) : null;
 
-    const userData = await prisma.users.findUnique(config);
-    const countDiary = await prisma.diaries.count({
-      where: {
-        assignTo: username,
-      },
-    });
+    const [userData, countDiary] = await prisma.$transaction([
+      prisma.users.findUnique(config),
+      prisma.diaries.count({
+        where: {
+          assignTo: username,
+        },
+      }),
+    ]);
 
     return {
       isOk: true,
