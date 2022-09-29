@@ -107,7 +107,7 @@ const updateOne = async (req, res) => {
 
 const search = async (req, res) => {
   try {
-    const { context } = req.query;
+    const { context } = req.params;
 
     if (!context)
       return res.status(httpStatus.badRequest).send({
@@ -127,6 +127,7 @@ const search = async (req, res) => {
 
     res.status(httpStatus.ok).send({
       isOk: true,
+      data: result.data,
       msg: 'success',
     });
   } catch (e) {

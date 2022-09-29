@@ -134,35 +134,71 @@ const _updateSingle = async ({ username, content }) => {
 
 const _fullTextSearch = async ({ context }) => {
   try {
-    const res = await prisma.$transaction([
-      prisma.users.findMany({
-        where: {
-          fname: {
-            search: context,
+    console.log(
+      [
+        context.split('')[0].toUpperCase(),
+        context
+          .split('')
+          .slice(1, context.split('').length)
+          .join('')
+          .toLowerCase(),
+      ].join('')
+    );
+    const res = await prisma.users.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              startsWith: context,
+            },
           },
-        },
-      }),
-      prisma.users.findMany({
-        where: {
-          lname: {
-            search: context,
+          {
+            username: {
+              contains: context,
+            },
           },
-        },
-      }),
-      prisma.users.findMany({
-        where: {
-          username: {
-            search: context,
+          {
+            username: {
+              search: context,
+            },
           },
-        },
-      }),
-    ]);
-
-    const format = [...new Set(...res[0], ...res[1], ...res[2])];
+          {
+            fname: {
+              startsWith: context,
+            },
+          },
+          {
+            fname: {
+              contains: context,
+            },
+          },
+          {
+            fname: {
+              search: context,
+            },
+          },
+          {
+            lname: {
+              startsWith: context,
+            },
+          },
+          {
+            lname: {
+              contains: context,
+            },
+          },
+          {
+            lname: {
+              search: context,
+            },
+          },
+        ],
+      },
+    });
 
     return {
       isOk: true,
-      data: format,
+      data: res,
       msg: 'search success',
     };
   } catch (e) {
