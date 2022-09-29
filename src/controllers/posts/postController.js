@@ -157,6 +157,7 @@ const getRecent = async (req, res) => {
         isOk: false,
         msg: result.msg,
       });
+
     const format = result.data.map((item) => {
       const formatData = formatDataFunction(item.dateTime);
       return {
@@ -212,12 +213,49 @@ const getById = async (req, res) => {
         msg: 'Post id is required',
       });
 
-    const result = await postService.post._getOne(postId);
+    const { data: result, isOk } = await postService.post._getOne(postId);
 
-    if (!result.isOk)
-      return res.status(httpStatus.internalServerError).send(result);
+    if (!isOk)
+      return res.status(httpStatus.internalServerError).send({
+        isOk: false,
+        msg: 'internal error on get by id controller',
+      });
 
-    res.status(httpStatus.ok).send(result);
+    const format = {
+      id: result.id,
+      username: result.Users.username,
+      name: `${result.Users.fname} ${result.Users.lname}`,
+      profileImage: result.Users.avatar,
+      dateTime: formatDataFunction(result.dateTime),
+      postContent: result.postContent,
+      isLike: result.likeBy
+        .map((result) => result.username)
+        .includes(req.jwtObject.username),
+      likeContent: {
+        likeCount: result.likeBy.length,
+        likedBy: result.likeBy,
+      },
+      imageUrl: result.imageUrl || null,
+      hasMoreComment: result.comment.length >= 3 ? true : false,
+      comment: result.comment.map((comment) => {
+        const formatDataC = formatDataFunction(comment.dataTime);
+        return {
+          id: comment.id,
+          name: `${comment.Users.fname} ${comment.Users.lname}`,
+          username: comment.Users.username,
+          profileImage: comment.Users.avatar,
+          content: comment.content,
+          dateTime: formatDataC,
+        };
+      }),
+    };
+
+    console.log(format);
+
+    res.status(httpStatus.ok).send({
+      ...result,
+      data: format,
+    });
   } catch (e) {
     console.log(e);
     return res.status(httpStatus.internalServerError).send({
