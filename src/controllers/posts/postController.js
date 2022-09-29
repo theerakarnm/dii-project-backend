@@ -14,6 +14,12 @@ const newPost = async (req, res) => {
 
   console.log(file);
   try {
+    if (!file && !body.textContent)
+      return res.status(httpStatus.badRequest).send({
+        isOk: false,
+        msg: 'Please provide rather file or content',
+      });
+
     const [_, tail] = !file ? [null, null] : file?.mimetype.split('/');
 
     const result = await postService.post._add({
@@ -24,7 +30,7 @@ const newPost = async (req, res) => {
     });
 
     if (!result.isOk)
-      return res.status(httpStatus.ok).send({
+      return res.status(httpStatus.internalServerError).send({
         isOk: false,
         msg: result.msg,
       });
