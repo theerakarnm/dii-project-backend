@@ -228,11 +228,23 @@ const _update = async ({ id, newContent }) => {
 
 const _delete = async ({ id }) => {
   try {
-    await prisma.posts.delete({
-      where: {
-        id,
-      },
-    });
+    await prisma.$transaction([
+      prisma.likeBy.deleteMany({
+        where: {
+          postsId: id,
+        },
+      }),
+      prisma.comments.deleteMany({
+        where: {
+          postsId: id,
+        },
+      }),
+      prisma.posts.delete({
+        where: {
+          id,
+        },
+      }),
+    ]);
 
     return {
       isOk: true,
