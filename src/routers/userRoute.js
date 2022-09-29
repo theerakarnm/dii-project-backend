@@ -4,7 +4,8 @@ import * as controller from '../controllers/userController';
 
 const router = express.Router();
 
-router.get('/:userId', controller.getOne);
-router.put('/:username', controller.updateOne);
+router.get('/:userId', auth, controller.getOne);
+router.put('/:username', auth, controller.updateOne);
+router.get('/search', auth, controller.search);
 
 export default router;

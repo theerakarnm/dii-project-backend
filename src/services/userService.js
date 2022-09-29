@@ -132,4 +132,46 @@ const _updateSingle = async ({ username, content }) => {
   }
 };
 
-export { _addUser, _getOne, _updateSingle };
+const _fullTextSearch = async ({ context }) => {
+  try {
+    const res = await prisma.$transaction([
+      prisma.users.findMany({
+        where: {
+          fname: {
+            search: context,
+          },
+        },
+      }),
+      prisma.users.findMany({
+        where: {
+          lname: {
+            search: context,
+          },
+        },
+      }),
+      prisma.users.findMany({
+        where: {
+          username: {
+            search: context,
+          },
+        },
+      }),
+    ]);
+
+    const format = [...new Set(...res[0], ...res[1], ...res[2])];
+
+    return {
+      isOk: true,
+      data: format,
+      msg: 'search success',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isOk: false,
+      msg: 'error on full text search service user',
+    };
+  }
+};
+
+export { _addUser, _getOne, _updateSingle, _fullTextSearch };
