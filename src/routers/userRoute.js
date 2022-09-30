@@ -5,7 +5,7 @@ import * as controller from '../controllers/userController';
 const router = express.Router();
 
 router.get('/:userId', auth, controller.getOne);
-router.put('/:username', auth, controller.updateOne);
+router.put('/:username', auth, controller.editProfile);
 router.get('/search/:context', auth, controller.search);
 
 export default router;

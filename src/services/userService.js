@@ -105,7 +105,7 @@ const _addUser = async (data) => {
   }
 };
 
-const editSingle = async (username, { fname, lname, bio }) => {
+const _editSingle = async (username, { fname, lname, bio }) => {
   try {
     let config = {
       where: {
@@ -237,4 +237,4 @@ const _fullTextSearch = async ({ context }) => {
   }
 };
 
-export { _addUser, _getOne, _updateSingle, _fullTextSearch, editSingle };
+export { _addUser, _getOne, _updateSingle, _fullTextSearch, _editSingle };

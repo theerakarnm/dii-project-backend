@@ -3,11 +3,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 import { httpStatus } from '../configs/httpStatus';
-import {
-  _fullTextSearch,
-  _getOne,
-  _updateSingle,
-} from '../services/userService';
+import { _fullTextSearch, _getOne, _editSingle } from '../services/userService';
 import formatData from '../libs/formatDateFromNow';
 
 const getOne = async (req, res) => {
@@ -109,7 +105,27 @@ const updateOne = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
+    const { fname, lname, bio } = req.body;
+    if (!fname && !lname && !bio)
+      return res.status(httpStatus.badRequest).send({
+        isOk: false,
+        msg: 'need to provide some argument fname, lname, bio',
+      });
+
+    console.log({ fname, lname, bio });
+
+    const result = await _editSingle(req.jwtObject.username, {
+      fname,
+      lname,
+      bio,
+    });
+
+    return res.status(httpStatus.ok).send({
+      isOk: false,
+      msg: 'updated',
+    });
   } catch (e) {
+    console.log(e);
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'error on edit profile controller',
@@ -151,4 +167,14 @@ const search = async (req, res) => {
   }
 };
 
-export { getOne, updateOne, search };
+const resetPassword = (req, res) => {
+  try {
+  } catch (e) {
+    return res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'internal error on reset password controller',
+    });
+  }
+};
+
+export { getOne, updateOne, search, editProfile };
