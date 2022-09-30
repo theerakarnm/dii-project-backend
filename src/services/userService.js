@@ -105,6 +105,33 @@ const _addUser = async (data) => {
   }
 };
 
+const editSingle = async (username, { fname, lname, bio }) => {
+  try {
+    let config = {
+      where: {
+        username,
+      },
+      data: {},
+    };
+
+    !!fname ? (config.data.fname = fname) : null;
+    !!lname ? (config.data.lname = lname) : null;
+    !!bio ? (config.data.bio = bio) : null;
+
+    await prisma.users.update(config);
+
+    return {
+      isOk: true,
+      msg: 'update success',
+    };
+  } catch (e) {
+    return {
+      isOk: false,
+      msg: 'error on edit single service',
+    };
+  }
+};
+
 const _updateSingle = async ({ username, content }) => {
   try {
     await prisma.users.update({
@@ -210,4 +237,4 @@ const _fullTextSearch = async ({ context }) => {
   }
 };
 
-export { _addUser, _getOne, _updateSingle, _fullTextSearch };
+export { _addUser, _getOne, _updateSingle, _fullTextSearch, editSingle };
