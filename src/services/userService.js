@@ -237,4 +237,36 @@ const _fullTextSearch = async ({ context }) => {
   }
 };
 
-export { _addUser, _getOne, _updateSingle, _fullTextSearch, _editSingle };
+const _updatePassword = async ({ username, newPassword }) => {
+  try {
+    const hashPassword = await hashString(newPassword);
+
+    await prisma.users.update({
+      where: {
+        username,
+      },
+      data: {
+        password: hashPassword.hash,
+      },
+    });
+
+    return {
+      isOk: true,
+      msg: 'update password success',
+    };
+  } catch (e) {
+    return {
+      isOk: false,
+      msg: 'internal error on update password service',
+    };
+  }
+};
+
+export {
+  _addUser,
+  _getOne,
+  _updateSingle,
+  _fullTextSearch,
+  _editSingle,
+  _updatePassword,
+};

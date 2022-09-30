@@ -177,4 +177,4 @@ const resetPassword = (req, res) => {
   }
 };
 
-export { getOne, updateOne, search, editProfile };
+export { getOne, updateOne, search, editProfile, resetPassword };
