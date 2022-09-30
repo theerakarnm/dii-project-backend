@@ -107,6 +107,16 @@ const updateOne = async (req, res) => {
   }
 };
 
+const editProfile = async (req, res) => {
+  try {
+  } catch (e) {
+    return res.status(httpStatus.internalServerError).send({
+      isOk: false,
+      msg: 'error on edit profile controller',
+    });
+  }
+};
+
 const search = async (req, res) => {
   try {
     const { context } = req.params;
