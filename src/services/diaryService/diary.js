@@ -51,6 +51,9 @@ export const _add = async (data) => {
 export const _getListByUsername = async ({ owner }) => {
   try {
     const result = await prisma.diaries.findMany({
+      orderBy: {
+        dateTime: 'desc',
+      },
       where: {
         assignTo: owner,
       },

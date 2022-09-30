@@ -27,9 +27,10 @@ model Users {
 }
 
 model Diaries {
-  diaryId  String @id @default(cuid())
+  diaryId  String   @id @default(cuid())
   imageUrl String
   assignTo String
+  dateTime DateTime @default(now())
 
   Users    Users?  @relation(fields: [assignBy], references: [username])
   assignBy String?

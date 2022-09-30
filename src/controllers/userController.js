@@ -40,15 +40,17 @@ const getOne = async (req, res) => {
       postCount: user.data.post.length,
       diaryCount: user.data.countDiary,
       email: user.data.email,
-      post: user.data.post.map((p) => {
-        const formatDataC = formatData(p.dateTime);
-        return {
-          id: p.id,
-          content: p.postContent,
-          imageUrl: p.imageUrl,
-          dateTime: formatDataC,
-        };
-      }),
+      post: user.data.post
+        .map((p) => {
+          const formatDataC = formatData(p.dateTime);
+          return {
+            id: p.id,
+            content: p.postContent,
+            imageUrl: p.imageUrl,
+            dateTime: formatDataC,
+          };
+        })
+        .reverse(),
     };
 
     res.status(httpStatus.ok).send({
