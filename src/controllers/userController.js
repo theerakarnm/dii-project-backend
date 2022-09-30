@@ -176,10 +176,16 @@ const resetPassword = async (req, res) => {
   try {
     const { pass, newPass } = req.body;
 
+    if (!pass || !newPass)
+      return res.status(httpStatus.badRequest).send({
+        isOk: false,
+        msg: 'Please provide data',
+      });
+
     const result = await _updatePassword({
       username: req.jwtObject.username,
-      pass,
-      newPass,
+      oldPassword: pass,
+      newPassword: newPass,
     });
 
     if (!result.isOk)
@@ -193,6 +199,7 @@ const resetPassword = async (req, res) => {
       msg: 'reset password success',
     });
   } catch (e) {
+    console.error(e);
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
       msg: 'internal error on reset password controller',

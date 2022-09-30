@@ -241,16 +241,16 @@ const _updatePassword = async ({ username, oldPassword, newPassword }) => {
   try {
     const hashPassword = await hashString(newPassword);
 
-    const { password } = await prisma.users.findUnique({
+    const data = await prisma.users.findUnique({
       where: {
         username,
       },
       select: {
-        password,
+        password: true,
       },
     });
 
-    const isMatch = await decodePassword(oldPassword, password);
+    const isMatch = await decodePassword(oldPassword, data.password);
 
     if (!isMatch)
       return {
@@ -272,6 +272,7 @@ const _updatePassword = async ({ username, oldPassword, newPassword }) => {
       msg: 'update password success',
     };
   } catch (e) {
+    console.error(e);
     return {
       isOk: false,
       msg: 'internal error on update password service',
