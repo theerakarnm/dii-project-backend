@@ -13,13 +13,6 @@ const newDiary = async (req, res) => {
   try {
     const [_, tail] = !file ? [null, null] : file?.mimetype.split('/');
 
-    console.log({
-      owner: req.jwtObject.username,
-      tail,
-      buffer: file?.buffer || null,
-      assignTo,
-    });
-
     const result = await _add({
       owner: req.jwtObject.username,
       tail,

@@ -20,6 +20,8 @@ const newPost = async (req, res) => {
         msg: 'Please provide rather file or content',
       });
 
+    console.log(file?.mimetype);
+
     const [_, tail] = !file ? [null, null] : file?.mimetype.split('/');
 
     const result = await postService.post._add({
@@ -90,68 +92,6 @@ const updatePost = async (req, res) => {
     });
   }
 };
-
-const getPopular = async (req, res) => {
-  try {
-    const result = await postService.post._getMostLike();
-
-    if (!result.isOk)
-      return res.status(httpStatus.ok).send({
-        isOk: false,
-        msg: result.msg,
-      });
-    const format = result.data.map((item) => {
-      const formatData = formatDataFunction(item.dateTime);
-
-      console.log({ like: item.likeBy.map((item) => item.username) });
-      console.log({
-        like2: item.likeBy
-          .map((item) => item.username)
-          .includes(req.jwtObject.username),
-      });
-      console.log({ comment: item.comment });
-      return {
-        id: item.id,
-        username: item.Users.username,
-        name: `${item.Users.fname} ${item.Users.lname}`,
-        profileImage: item.Users.avatar,
-        dateTime: formatData,
-        postContent: item.postContent,
-        isLike: item.likeBy
-          .map((item) => item.username)
-          .includes(req.jwtObject.username),
-        likeContent: {
-          likeCount: item.likeBy.length,
-          likedBy: item.likeBy,
-        },
-        imageUrl: item.imageUrl || null,
-        comment: item.comment.map((comment) => {
-          const formatDataC = formatDataFunction(comment.dataTime);
-          return {
-            id: comment.id,
-            name: `${comment.Users.fname} ${comment.Users.lname}`,
-            profileImage: comment.Users.avatar,
-            content: comment.content,
-            dateTime: formatDataC,
-          };
-        }),
-      };
-    });
-
-    return res.status(httpStatus.ok).send({
-      isOk: true,
-      data: format,
-      msg: result.msg,
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(httpStatus.internalServerError).send({
-      isOk: false,
-      msg: 'internal error on top like',
-    });
-  }
-};
-
 const getRecent = async (req, res) => {
   try {
     const result = await postService.post._getRecentPost();
@@ -271,4 +211,4 @@ const getById = async (req, res) => {
   }
 };
 
-export { newPost, getPopular, getRecent, deletePost, updatePost, getById };
+export { newPost, getRecent, deletePost, updatePost, getById };

@@ -27,6 +27,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
+    console.time('passCheck');
     const { data } = await _getOne(username, {
       username: true,
       password: true,
@@ -67,6 +68,7 @@ const login = async (req, res) => {
       secret,
       { expiresIn: '240h' }
     );
+    console.timeEnd('passCheck');
 
     return res.status(httpStatus.ok).send({
       isOk: true,

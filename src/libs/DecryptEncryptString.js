@@ -8,6 +8,6 @@ export const hashString = async (str) => {
   };
 };
 
-export const decodePassword = (str, hash) => {
+export const decodePassword = async (str, hash) => {
   return bcrypt.compare(str, hash);
 };

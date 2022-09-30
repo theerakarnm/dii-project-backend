@@ -161,16 +161,6 @@ const _updateSingle = async ({ username, content }) => {
 
 const _fullTextSearch = async ({ context }) => {
   try {
-    console.log(
-      [
-        context.split('')[0].toUpperCase(),
-        context
-          .split('')
-          .slice(1, context.split('').length)
-          .join('')
-          .toLowerCase(),
-      ].join('')
-    );
     const res = await prisma.users.findMany({
       where: {
         OR: [

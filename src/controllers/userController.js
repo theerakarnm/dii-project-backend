@@ -117,9 +117,7 @@ const editProfile = async (req, res) => {
         msg: 'need to provide some argument fname, lname, bio',
       });
 
-    console.log({ fname, lname, bio });
-
-    const result = await _editSingle(req.jwtObject.username, {
+    await _editSingle(req.jwtObject.username, {
       fname,
       lname,
       bio,
