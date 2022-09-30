@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import storageClient from '../configs/connectStorage';
 import { v4 } from 'uuid';
 
-import { hashString } from '../libs/DecryptEncryptString';
+import { hashString, decodePassword } from '../libs/DecryptEncryptString';
 import randAvatar from '../libs/randomAvatar';
 
 dotenv.config();
@@ -237,9 +237,26 @@ const _fullTextSearch = async ({ context }) => {
   }
 };
 
-const _updatePassword = async ({ username, newPassword }) => {
+const _updatePassword = async ({ username, oldPassword, newPassword }) => {
   try {
     const hashPassword = await hashString(newPassword);
+
+    const { password } = await prisma.users.findUnique({
+      where: {
+        username,
+      },
+      select: {
+        password,
+      },
+    });
+
+    const isMatch = await decodePassword(oldPassword, password);
+
+    if (!isMatch)
+      return {
+        isOk: false,
+        msg: 'password is not match',
+      };
 
     await prisma.users.update({
       where: {

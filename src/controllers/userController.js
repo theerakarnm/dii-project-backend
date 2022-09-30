@@ -3,7 +3,12 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 import { httpStatus } from '../configs/httpStatus';
-import { _fullTextSearch, _getOne, _editSingle } from '../services/userService';
+import {
+  _fullTextSearch,
+  _getOne,
+  _editSingle,
+  _updatePassword,
+} from '../services/userService';
 import formatData from '../libs/formatDateFromNow';
 
 const getOne = async (req, res) => {
@@ -167,8 +172,26 @@ const search = async (req, res) => {
   }
 };
 
-const resetPassword = (req, res) => {
+const resetPassword = async (req, res) => {
   try {
+    const { pass, newPass } = req.body;
+
+    const result = await _updatePassword({
+      username: req.jwtObject.username,
+      pass,
+      newPass,
+    });
+
+    if (!result.isOk)
+      return res.status(httpStatus.internalServerError).send({
+        isOk: false,
+        msg: result.msg,
+      });
+
+    return res.status(httpStatus.ok).send({
+      isOk: true,
+      msg: 'reset password success',
+    });
   } catch (e) {
     return res.status(httpStatus.internalServerError).send({
       isOk: false,
