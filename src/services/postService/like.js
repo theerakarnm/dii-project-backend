@@ -35,6 +35,8 @@ const _update = async ({ postsId, num, username }) => {
       isOk: false,
       msg: 'internal error on update like service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 

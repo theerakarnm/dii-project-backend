@@ -41,6 +41,8 @@ const _getOne = async (username, select = {}) => {
       data: null,
       msg: 'Internal error',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -102,6 +104,8 @@ const _addUser = async (data) => {
       data: {},
       msg: 'Internal Server Error Agent',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -129,6 +133,8 @@ const _editSingle = async (username, { fname, lname, bio }) => {
       isOk: false,
       msg: 'error on edit single service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -156,6 +162,8 @@ const _updateSingle = async ({ username, content }) => {
       isOk: false,
       msg: 'error on update single service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -224,6 +232,8 @@ const _fullTextSearch = async ({ context }) => {
       isOk: false,
       msg: 'error on full text search service user',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -267,6 +277,8 @@ const _updatePassword = async ({ username, oldPassword, newPassword }) => {
       isOk: false,
       msg: 'internal error on update password service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 

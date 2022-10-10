@@ -45,6 +45,8 @@ export const _add = async (data) => {
       isOk: false,
       msg: 'internal error on add diary service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -70,5 +72,7 @@ export const _getListByUsername = async ({ owner }) => {
       isOk: false,
       msg: 'internal error on add diary service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };

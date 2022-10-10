@@ -35,6 +35,8 @@ export const _getListPerPost = async ({ postId }) => {
       isOk: false,
       msg: 'internal error',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -60,6 +62,8 @@ export const _add = async ({ owner, postId, content }) => {
       isOk: false,
       msg: 'internal error at addNewComment service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -91,5 +95,7 @@ export const _getCommentPerPost = async ({ postId }) => {
       isOk: false,
       msg: 'internal error at getCommentPerPost service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };

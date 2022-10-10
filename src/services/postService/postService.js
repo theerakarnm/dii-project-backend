@@ -47,6 +47,8 @@ const _add = async (data) => {
       isOk: false,
       msg: 'internal error on add post service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -98,6 +100,8 @@ const _getRecentPost = async () => {
       isOk: false,
       msg: 'Internal Error on get most like service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -148,6 +152,8 @@ const _getOne = async (postId) => {
       isOk: false,
       msg: 'internal error on get one post service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -172,6 +178,8 @@ const _update = async ({ id, newContent }) => {
       isOk: false,
       msg: 'internal error on update post service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
@@ -205,6 +213,8 @@ const _delete = async ({ id }) => {
       isOk: false,
       msg: 'internal error on delete post service',
     };
+  } finally {
+    prisma.$disconnect();
   }
 };
 
