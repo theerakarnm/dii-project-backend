@@ -1,5 +1,5 @@
 datasource db {
-  provider = "cockroachdb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -67,7 +67,7 @@ model LikeBy {
 }
 
 model Comments {
-  id       Int      @id @default(sequence())
+  id       Int      @id @default(autoincrement())
   Users    Users?   @relation(fields: [username], references: [username])
   username String
   content  String

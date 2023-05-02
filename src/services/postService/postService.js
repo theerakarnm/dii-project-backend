@@ -9,8 +9,7 @@ const prisma = new PrismaClient();
 
 const _add = async (data) => {
   try {
-    const storageUrl =
-      'https://oijsgpmyxcrqexaewofb.supabase.co/storage/v1/object/public/';
+    const storageUrl = process.env.SUPABASE_URL + '/storage/v1/object/public/';
 
     const uniqueString = v4();
 

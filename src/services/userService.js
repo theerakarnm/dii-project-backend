@@ -54,8 +54,7 @@ const _addUser = async (data) => {
       hashString(data.password),
       randAvatar(randString),
     ]);
-    const storageUrl =
-      'https://oijsgpmyxcrqexaewofb.supabase.co/storage/v1/object/public/';
+    const storageUrl = process.env.SUPABASE_URL + '/storage/v1/object/public/';
 
     const x = await storageClient
       .from('dii-project-bucket')
@@ -63,10 +62,13 @@ const _addUser = async (data) => {
         cacheControl: '3600',
         upsert: false,
       });
+    console.log({ x: x.cause, storageUrl });
 
     if (x.error) throw new Error(x.error);
 
     const imageUrl = `${storageUrl}${x.data.Key}`;
+
+    console.log(imageUrl);
 
     await prisma.users.create({
       data: {
